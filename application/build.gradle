@@ -1,0 +1,39 @@
+apply plugin: 'nu.studer.jooq'
+
+dependencies {
+    compile project(":entity")
+    compile 'org.springframework.boot:spring-boot-starter-jooq'
+    compile 'org.springframework.boot:spring-boot-starter'
+
+    runtime('com.h2database:h2')
+
+    // important jooq dependency
+    jooqRuntime project(":entity")
+    jooqRuntime("org.jooq:jooq-meta-extensions")
+}
+
+/**
+ * JOOQ JPADatabase config for jpa
+ * */
+jooq {
+    version = '3.11.11'
+    edition = 'OSS'
+    sample(sourceSets.main) {
+        generator {
+            database {
+                name = 'org.jooq.meta.extensions.jpa.JPADatabase'
+                properties {
+                    property {
+                        key = "packages"
+                        value = "ryudung.example.entity"
+                    }
+                }
+            }
+            generate {
+            }
+            target {
+                directory = 'target/generated-sources'
+            }
+        }
+    }
+}
